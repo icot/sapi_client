@@ -1,1 +1,945 @@
-{"swagger": "2.0", "basePath": "/", "paths": {"/{subsystem}/export": {"parameters": [{"in": "path", "description": "The subsystem to run the command on.", "name": "subsystem", "required": true, "type": "string"}], "get": {"responses": {"403": {"description": "Current user is not logged in or not a member of the role 'ADMIN_ROLE'"}, "200": {"description": "The full policy", "schema": {"type": "array", "items": {"$ref": "#/definitions/Export Policy"}}}}, "description": "Get all ACLs present on the back-end", "operationId": "get_all_exports", "parameters": [{"name": "X-Fields", "in": "header", "type": "string", "format": "mask", "description": "An optional fields mask"}], "security": [{"sso": ["read", "write"]}], "tags": ["/"]}}, "/{subsystem}/export/{policy}": {"parameters": [{"in": "path", "description": "The policy to operate on", "name": "policy", "required": true, "type": "string"}, {"in": "path", "description": "The subsystem to run the command on.", "name": "subsystem", "required": true, "type": "string"}], "delete": {"responses": {"403": {"description": "Current user is not logged in or not a member of the role 'ADMIN_ROLE'"}, "404": {"description": "No such policy exists"}, "204": {"description": "Successfully deleted the policy"}}, "description": "Delete the entire policy", "operationId": "delete_export", "security": [{"sso": ["read", "write"]}], "tags": ["/"]}, "get": {"responses": {"403": {"description": "Current user is not logged in or not a member of the role 'ADMIN_ROLE'"}, "200": {"description": "Get the rules of a specific policy", "schema": {"$ref": "#/definitions/Export Policy"}}}, "description": "Display the rules of a given policy", "operationId": "get_export", "parameters": [{"name": "X-Fields", "in": "header", "type": "string", "format": "mask", "description": "An optional fields mask"}], "security": [{"sso": ["read", "write"]}], "tags": ["/"]}, "post": {"responses": {"403": {"description": "Current user is not logged in or not a member of the role 'ADMIN_ROLE'"}, "400": {"description": "A policy with that name already exists"}, "201": {"description": "The provided access rules were added"}}, "description": "Grant hosts matching a given pattern access to the given volume", "operationId": "post_export", "parameters": [{"name": "payload", "required": true, "in": "body", "schema": {"$ref": "#/definitions/PolicyRule"}}], "security": [{"sso": ["read", "write"]}], "tags": ["/"]}}, "/{subsystem}/export/{policy}/{rule}": {"parameters": [{"in": "path", "description": "The policy rule to operate on", "name": "rule", "required": true, "type": "string"}, {"in": "path", "description": "The policy to operate on", "name": "policy", "required": true, "type": "string"}, {"in": "path", "description": "The subsystem to run the command on.", "name": "subsystem", "required": true, "type": "string"}], "delete": {"responses": {"403": {"description": "Current user is not logged in or not a member of the role 'ADMIN_ROLE'"}, "404": {"description": "No such policy exists"}, "204": {"description": "Successfully deleted the rule, or rule did not exist"}}, "description": "Delete rule from policy", "operationId": "delete_export_rule", "security": [{"sso": ["read", "write"]}], "tags": ["/"]}, "put": {"responses": {"403": {"description": "Current user is not logged in or not a member of the role 'ADMIN_ROLE'"}, "201": {"description": "The provided access rule was added or already present"}}, "description": "Grant hosts matching a given pattern access", "operationId": "put_export_rule", "security": [{"sso": ["read", "write"]}], "tags": ["/"]}}, "/{subsystem}/volumes": {"parameters": [{"in": "path", "description": "The subsystem to run the command on.", "name": "subsystem", "required": true, "type": "string"}], "get": {"responses": {"403": {"description": "Current user is not logged in or not a member of the role 'USER_ROLE'"}, "200": {"description": "Success", "schema": {"type": "array", "items": {"$ref": "#/definitions/VolumeRead"}}}}, "description": "Get a list of all volumes", "operationId": "get_volumes", "parameters": [{"name": "X-Fields", "in": "header", "type": "string", "format": "mask", "description": "An optional fields mask"}], "security": [{"sso": ["read", "write"]}], "tags": ["/"]}}, "/{subsystem}/volumes/{volume_name}": {"parameters": [{"in": "path", "description": "The name of the volume. Must not contain leading /. On NetApp back-ends, this may either be the name of a volume, or node_name:/junction/path.", "name": "volume_name", "required": true, "type": "string"}, {"in": "path", "description": "The subsystem to run the command on.", "name": "subsystem", "required": true, "type": "string"}], "delete": {"responses": {"403": {"description": "Current user is not logged in or not a member of the role 'UBER_ADMIN_ROLE'"}, "204": {"description": "Successfully restricted"}}, "description": "Restrict the volume named *volume_name* but do not actually delete it", "operationId": "delete_volume", "security": [{"sso": ["read", "write"]}], "tags": ["/"]}, "get": {"responses": {"403": {"description": "Current user is not logged in or not a member of the role 'USER_ROLE'"}, "201": {"description": "A new volume was created"}, "404": {"description": "No such volume exists"}, "200": {"description": "The volume named volume_name", "schema": {"$ref": "#/definitions/VolumeRead"}}}, "description": "Get a specific volume by name", "operationId": "get_volume", "parameters": [{"name": "X-Fields", "in": "header", "type": "string", "format": "mask", "description": "An optional fields mask"}], "security": [{"sso": ["read", "write"]}], "tags": ["/"]}, "patch": {"responses": {"403": {"description": "Current user is not logged in or not a member of the role 'UBER_ADMIN_ROLE'"}}, "description": "Partially update volume_name", "operationId": "patch_volume", "parameters": [{"name": "payload", "required": true, "in": "body", "schema": {"$ref": "#/definitions/VolumeWrite"}}], "security": [{"sso": ["read", "write"]}], "tags": ["/"]}, "post": {"responses": {"403": {"description": "Current user is not logged in or not a member of the role 'ADMIN_ROLE'"}, "200": {"description": "The newly created volume (if created), otherwise nothing", "schema": {"$ref": "#/definitions/VolumeRead"}}}, "description": "Create a new volume with the given details.  If `from_snapshot` is a snapshot and `volume_name` already refers to an existing volume, roll back that volume to that snapshot. If `from_snapshot` is a snapshot, `from_volume` is an existing volume and `volume_name` doesn't already exist, create a clone of `from_volume` named `volume_name`, in the state at `from_snapshot`.", "operationId": "post_volume", "parameters": [{"name": "payload", "required": true, "in": "body", "schema": {"$ref": "#/definitions/OptionalFromSnapshot"}}, {"name": "X-Fields", "in": "header", "type": "string", "format": "mask", "description": "An optional fields mask"}], "security": [{"sso": ["read", "write"]}], "tags": ["/"]}}, "/{subsystem}/volumes/{volume_name}/locks": {"parameters": [{"in": "path", "description": "The name of the volume. Must not contain leading /. On NetApp back-ends, this may either be the name of a volume, or node_name:/junction/path.", "name": "volume_name", "required": true, "type": "string"}, {"in": "path", "description": "The subsystem to run the command on.", "name": "subsystem", "required": true, "type": "string"}], "get": {"responses": {"403": {"description": "Current user is not logged in or not a member of the role 'USER_ROLE'"}, "200": {"description": "An empty list (if no locks were held) or a single dict describing the host holding the lock", "schema": {"type": "array", "items": {"$ref": "#/definitions/Lock"}}}}, "description": "Get the host locking the volume, if any", "operationId": "get_all_locks", "parameters": [{"name": "X-Fields", "in": "header", "type": "string", "format": "mask", "description": "An optional fields mask"}], "security": [{"sso": ["read", "write"]}], "tags": ["/"]}}, "/{subsystem}/volumes/{volume_name}/locks/{host}": {"parameters": [{"in": "path", "description": "the host holding the lock in question", "name": "host", "required": true, "type": "string"}, {"in": "path", "description": "The name of the volume. Must not contain leading /. On NetApp back-ends, this may either be the name of a volume, or node_name:/junction/path.", "name": "volume_name", "required": true, "type": "string"}, {"in": "path", "description": "The subsystem to run the command on.", "name": "subsystem", "required": true, "type": "string"}], "delete": {"responses": {"403": {"description": "Current user is not logged in or not a member of the role 'UBER_ADMIN_ROLE'"}, "204": {"description": "Lock successfully forced"}}, "description": "Force the lock for the host", "operationId": "delete_locks", "security": [{"sso": ["read", "write"]}], "tags": ["/"]}, "put": {"responses": {"403": {"description": "Current user is not logged in or not a member of the role 'ADMIN_ROLE'"}, "201": {"description": "A new lock was added"}}, "description": "Lock the volume with host holding the lock", "operationId": "put_locks", "security": [{"sso": ["read", "write"]}], "tags": ["/"]}}, "/{subsystem}/volumes/{volume_name}/snapshots": {"parameters": [{"in": "path", "description": "The name of the volume. Must not contain leading /. On NetApp back-ends, this may either be the name of a volume, or node_name:/junction/path.", "name": "volume_name", "required": true, "type": "string"}, {"in": "path", "description": "The subsystem to run the command on.", "name": "subsystem", "required": true, "type": "string"}], "get": {"responses": {"200": {"description": "All snapshots for the volume", "schema": {"type": "array", "items": {"$ref": "#/definitions/Snapshot"}}}}, "operationId": "get_all_snapshots", "parameters": [{"name": "X-Fields", "in": "header", "type": "string", "format": "mask", "description": "An optional fields mask"}], "tags": ["/"]}}, "/{subsystem}/volumes/{volume_name}/snapshots/{snapshot_name}": {"parameters": [{"in": "path", "description": "The snapshot name", "name": "snapshot_name", "required": true, "type": "string"}, {"in": "path", "description": "The name of the volume. Must not contain leading /. On NetApp back-ends, this may either be the name of a volume, or node_name:/junction/path.", "name": "volume_name", "required": true, "type": "string"}, {"in": "path", "description": "The subsystem to run the command on.", "name": "subsystem", "required": true, "type": "string"}], "delete": {"responses": {"403": {"description": "Current user is not logged in or not a member of the role 'ADMIN_ROLE'"}, "404": {"description": "No such snapshot"}, "204": {"description": "Successfully deleted"}}, "description": "Delete the snapshot", "operationId": "delete_snapshots", "security": [{"sso": ["read", "write"]}], "tags": ["/"]}, "get": {"responses": {"200": {"description": "Success", "schema": {"$ref": "#/definitions/Snapshot"}}}, "description": "Get the current information for a given snapshot", "operationId": "get_snapshots", "parameters": [{"name": "X-Fields", "in": "header", "type": "string", "format": "mask", "description": "An optional fields mask"}], "tags": ["/"]}, "post": {"responses": {"201": {"description": "Successfully created a snapshot"}, "409": {"description": "Too many snapshots, cannot create another. Try `purge_old_if_needed=true`."}}, "description": "Create a new snapshot of *volume_name* under *snapshot_name*", "operationId": "post_snapshots", "parameters": [{"name": "payload", "required": true, "in": "body", "schema": {"$ref": "#/definitions/SnapshotPut"}}], "tags": ["/"]}}}, "info": {"title": "CERN Unified Storage API", "version": "2.0.3", "description": "A unified storage API for all data-storage back-ends."}, "produces": ["application/json"], "consumes": ["application/json"], "tags": [{"name": "default", "description": "Default namespace"}, {"name": "/", "description": "Storage operations"}], "definitions": {"VolumeRead": {"allOf": [{"$ref": "#/definitions/VolumeCreate"}, {"properties": {"size_used": {"type": "integer"}, "uuid": {"type": "string", "minLength": 1}, "state": {"type": "string", "minLength": 1}, "filer_address": {"type": "string", "minLength": 1}, "creation_time": {"type": "string", "format": "date-time"}, "percentage_snapshot_reserve_used": {"type": "integer"}}, "type": "object"}]}, "VolumeCreate": {"allOf": [{"$ref": "#/definitions/VolumeWrite"}, {"properties": {"name": {"type": "string", "description": "The internal name of the volume", "example": "volume_name", "minLength": 1}, "size_total": {"type": "integer", "description": "The total size of the volume,  in bytes. If creating, the size of the volume."}, "aggregate_name": {"type": "string", "description": "If applicable, the aggregate to place the volume in (NetApp only). If not provided, will use the one with the most free space.", "minLength": 1}, "junction_path": {"type": "string", "minLength": 1}}, "type": "object"}]}, "VolumeWrite": {"properties": {"autosize_enabled": {"type": "boolean"}, "autosize_increment": {"type": "integer"}, "max_autosize": {"type": "integer"}, "active_policy_name": {"type": "string", "minLength": 1}, "percentage_snapshot_reserve": {"type": "integer"}, "compression_enabled": {"type": "boolean"}, "inline_compression": {"type": "boolean"}, "caching_policy": {"type": "string"}}, "type": "object"}, "OptionalFromSnapshot": {"allOf": [{"$ref": "#/definitions/VolumeCreate"}, {"properties": {"from_snapshot": {"type": "string", "description": "The snapshot name to create from/restore"}, "from_volume": {"type": "string", "description": "When cloning a volume, use this volume as basis for the snapshot to start from"}}, "type": "object"}]}, "Snapshot": {"properties": {"name": {"type": "string"}}, "type": "object"}, "SnapshotPut": {"properties": {"purge_old_if_needed": {"type": "boolean", "description": "If `true`, purge the oldest snapshot iff necessary  to create a new one"}}, "type": "object"}, "Lock": {"required": ["host"], "properties": {"host": {"type": "string", "example": "dbthing.cern.ch", "minLength": 1}}, "type": "object"}, "Export Policy": {"properties": {"name": {"type": "string", "example": "allow_cluster_x", "minLength": 1}, "rules": {"type": "array", "items": {"type": "string", "example": "10.10.10.1/24", "minLength": 1}}}, "type": "object"}, "PolicyRule": {"properties": {"rules": {"type": "array", "items": {"type": "string", "example": "10.10.10.1/24", "minLength": 1}}}, "type": "object"}}, "responses": {"ParseError": {"description": "When a mask can't be parsed"}, "MaskError": {"description": "When any error occurs on mask"}, "APIError": {"description": "Return the error message from the filer and 500 status code"}}}
+{
+  "swagger": "2.0",
+  "basePath": "/",
+  "paths": {
+    "/{subsystem}/export": {
+      "parameters": [
+        {
+          "in": "path",
+          "description": "The subsystem to run the command on.",
+          "name": "subsystem",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "get": {
+        "responses": {
+          "200": {
+            "description": "The full policy",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Export Policy"
+              }
+            }
+          },
+          "403": {
+            "description": "Current user is not logged in or not a member of the role 'ADMIN_ROLE'"
+          }
+        },
+        "description": "Get all ACLs present on the back-end",
+        "operationId": "get_all_exports",
+        "parameters": [
+          {
+            "name": "X-Fields",
+            "in": "header",
+            "type": "string",
+            "format": "mask",
+            "description": "An optional fields mask"
+          }
+        ],
+        "security": [
+          {
+            "sso": [
+              "read",
+              "write"
+            ]
+          }
+        ],
+        "tags": [
+          "storage"
+        ]
+      }
+    },
+    "/{subsystem}/export/{policy}": {
+      "parameters": [
+        {
+          "in": "path",
+          "description": "The policy to operate on",
+          "name": "policy",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "in": "path",
+          "description": "The subsystem to run the command on.",
+          "name": "subsystem",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "delete": {
+        "responses": {
+          "204": {
+            "description": "Successfully deleted the policy"
+          },
+          "403": {
+            "description": "Current user is not logged in or not a member of the role 'ADMIN_ROLE'"
+          },
+          "404": {
+            "description": "No such policy exists"
+          }
+        },
+        "description": "Delete the entire policy",
+        "operationId": "delete_export",
+        "security": [
+          {
+            "sso": [
+              "read",
+              "write"
+            ]
+          }
+        ],
+        "tags": [
+          "storage"
+        ]
+      },
+      "get": {
+        "responses": {
+          "200": {
+            "description": "Get the rules of a specific policy",
+            "schema": {
+              "$ref": "#/definitions/Export Policy"
+            }
+          },
+          "403": {
+            "description": "Current user is not logged in or not a member of the role 'ADMIN_ROLE'"
+          }
+        },
+        "description": "Display the rules of a given policy",
+        "operationId": "get_export",
+        "parameters": [
+          {
+            "name": "X-Fields",
+            "in": "header",
+            "type": "string",
+            "format": "mask",
+            "description": "An optional fields mask"
+          }
+        ],
+        "security": [
+          {
+            "sso": [
+              "read",
+              "write"
+            ]
+          }
+        ],
+        "tags": [
+          "storage"
+        ]
+      },
+      "post": {
+        "responses": {
+          "201": {
+            "description": "The provided access rules were added"
+          },
+          "400": {
+            "description": "A policy with that name already exists"
+          },
+          "403": {
+            "description": "Current user is not logged in or not a member of the role 'ADMIN_ROLE'"
+          }
+        },
+        "description": "Grant hosts matching a given pattern access to the given volume",
+        "operationId": "post_export",
+        "parameters": [
+          {
+            "name": "payload",
+            "required": true,
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/PolicyRule"
+            }
+          }
+        ],
+        "security": [
+          {
+            "sso": [
+              "read",
+              "write"
+            ]
+          }
+        ],
+        "tags": [
+          "storage"
+        ]
+      }
+    },
+    "/{subsystem}/export/{policy}/{rule}": {
+      "parameters": [
+        {
+          "in": "path",
+          "description": "The policy rule to operate on",
+          "name": "rule",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "in": "path",
+          "description": "The policy to operate on",
+          "name": "policy",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "in": "path",
+          "description": "The subsystem to run the command on.",
+          "name": "subsystem",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "delete": {
+        "responses": {
+          "204": {
+            "description": "Successfully deleted the rule, or rule did not exist"
+          },
+          "403": {
+            "description": "Current user is not logged in or not a member of the role 'ADMIN_ROLE'"
+          },
+          "404": {
+            "description": "No such policy exists"
+          }
+        },
+        "description": "Delete rule from policy",
+        "operationId": "delete_export_rule",
+        "security": [
+          {
+            "sso": [
+              "read",
+              "write"
+            ]
+          }
+        ],
+        "tags": [
+          "storage"
+        ]
+      },
+      "put": {
+        "responses": {
+          "201": {
+            "description": "The provided access rule was added or already present"
+          },
+          "403": {
+            "description": "Current user is not logged in or not a member of the role 'ADMIN_ROLE'"
+          }
+        },
+        "description": "Grant hosts matching a given pattern access",
+        "operationId": "put_export_rule",
+        "security": [
+          {
+            "sso": [
+              "read",
+              "write"
+            ]
+          }
+        ],
+        "tags": [
+          "storage"
+        ]
+      }
+    },
+    "/{subsystem}/volumes": {
+      "parameters": [
+        {
+          "in": "path",
+          "description": "The subsystem to run the command on.",
+          "name": "subsystem",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "get": {
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/VolumeRead"
+              }
+            }
+          },
+          "403": {
+            "description": "Current user is not logged in or not a member of the role 'USER_ROLE'"
+          }
+        },
+        "description": "Get a list of all volumes",
+        "operationId": "get_volumes",
+        "parameters": [
+          {
+            "name": "X-Fields",
+            "in": "header",
+            "type": "string",
+            "format": "mask",
+            "description": "An optional fields mask"
+          }
+        ],
+        "security": [
+          {
+            "sso": [
+              "read",
+              "write"
+            ]
+          }
+        ],
+        "tags": [
+          "storage"
+        ]
+      }
+    },
+    "/{subsystem}/volumes/{volume_name}": {
+      "parameters": [
+        {
+          "in": "path",
+          "description": "The name of the volume. Must not contain leading /. On NetApp back-ends, this may either be the name of a volume, or node_name:/junction/path.",
+          "name": "volume_name",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "in": "path",
+          "description": "The subsystem to run the command on.",
+          "name": "subsystem",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "delete": {
+        "responses": {
+          "204": {
+            "description": "Successfully restricted"
+          },
+          "403": {
+            "description": "Current user is not logged in or not a member of the role 'UBER_ADMIN_ROLE'"
+          }
+        },
+        "description": "Restrict the volume named *volume_name* but do not actually delete it",
+        "operationId": "delete_volume",
+        "security": [
+          {
+            "sso": [
+              "read",
+              "write"
+            ]
+          }
+        ],
+        "tags": [
+          "storage"
+        ]
+      },
+      "get": {
+        "responses": {
+          "200": {
+            "description": "The volume named volume_name",
+            "schema": {
+              "$ref": "#/definitions/VolumeRead"
+            }
+          },
+          "201": {
+            "description": "A new volume was created"
+          },
+          "403": {
+            "description": "Current user is not logged in or not a member of the role 'USER_ROLE'"
+          },
+          "404": {
+            "description": "No such volume exists"
+          }
+        },
+        "description": "Get a specific volume by name",
+        "operationId": "get_volume",
+        "parameters": [
+          {
+            "name": "X-Fields",
+            "in": "header",
+            "type": "string",
+            "format": "mask",
+            "description": "An optional fields mask"
+          }
+        ],
+        "security": [
+          {
+            "sso": [
+              "read",
+              "write"
+            ]
+          }
+        ],
+        "tags": [
+          "storage"
+        ]
+      },
+      "patch": {
+        "responses": {
+          "403": {
+            "description": "Current user is not logged in or not a member of the role 'UBER_ADMIN_ROLE'"
+          }
+        },
+        "description": "Partially update volume_name",
+        "operationId": "patch_volume",
+        "parameters": [
+          {
+            "name": "payload",
+            "required": true,
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/VolumeWrite"
+            }
+          }
+        ],
+        "security": [
+          {
+            "sso": [
+              "read",
+              "write"
+            ]
+          }
+        ],
+        "tags": [
+          "storage"
+        ]
+      },
+      "post": {
+        "responses": {
+          "200": {
+            "description": "The newly created volume (if created), otherwise nothing",
+            "schema": {
+              "$ref": "#/definitions/VolumeRead"
+            }
+          },
+          "403": {
+            "description": "Current user is not logged in or not a member of the role 'ADMIN_ROLE'"
+          }
+        },
+        "description": "Create a new volume with the given details.  If `from_snapshot` is a snapshot and `volume_name` already refers to an existing volume, roll back that volume to that snapshot. If `from_snapshot` is a snapshot, `from_volume` is an existing volume and `volume_name` doesn't already exist, create a clone of `from_volume` named `volume_name`, in the state at `from_snapshot`.",
+        "operationId": "post_volume",
+        "parameters": [
+          {
+            "name": "payload",
+            "required": true,
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/OptionalFromSnapshot"
+            }
+          },
+          {
+            "name": "X-Fields",
+            "in": "header",
+            "type": "string",
+            "format": "mask",
+            "description": "An optional fields mask"
+          }
+        ],
+        "security": [
+          {
+            "sso": [
+              "read",
+              "write"
+            ]
+          }
+        ],
+        "tags": [
+          "storage"
+        ]
+      }
+    },
+    "/{subsystem}/volumes/{volume_name}/locks": {
+      "parameters": [
+        {
+          "in": "path",
+          "description": "The name of the volume. Must not contain leading /. On NetApp back-ends, this may either be the name of a volume, or node_name:/junction/path.",
+          "name": "volume_name",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "in": "path",
+          "description": "The subsystem to run the command on.",
+          "name": "subsystem",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "get": {
+        "responses": {
+          "200": {
+            "description": "An empty list (if no locks were held) or a single dict describing the host holding the lock",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Lock"
+              }
+            }
+          },
+          "403": {
+            "description": "Current user is not logged in or not a member of the role 'USER_ROLE'"
+          }
+        },
+        "description": "Get the host locking the volume, if any",
+        "operationId": "get_all_locks",
+        "parameters": [
+          {
+            "name": "X-Fields",
+            "in": "header",
+            "type": "string",
+            "format": "mask",
+            "description": "An optional fields mask"
+          }
+        ],
+        "security": [
+          {
+            "sso": [
+              "read",
+              "write"
+            ]
+          }
+        ],
+        "tags": [
+          "storage"
+        ]
+      }
+    },
+    "/{subsystem}/volumes/{volume_name}/locks/{host}": {
+      "parameters": [
+        {
+          "in": "path",
+          "description": "the host holding the lock in question",
+          "name": "host",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "in": "path",
+          "description": "The name of the volume. Must not contain leading /. On NetApp back-ends, this may either be the name of a volume, or node_name:/junction/path.",
+          "name": "volume_name",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "in": "path",
+          "description": "The subsystem to run the command on.",
+          "name": "subsystem",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "delete": {
+        "responses": {
+          "204": {
+            "description": "Lock successfully forced"
+          },
+          "403": {
+            "description": "Current user is not logged in or not a member of the role 'UBER_ADMIN_ROLE'"
+          }
+        },
+        "description": "Force the lock for the host",
+        "operationId": "delete_locks",
+        "security": [
+          {
+            "sso": [
+              "read",
+              "write"
+            ]
+          }
+        ],
+        "tags": [
+          "storage"
+        ]
+      },
+      "put": {
+        "responses": {
+          "201": {
+            "description": "A new lock was added"
+          },
+          "403": {
+            "description": "Current user is not logged in or not a member of the role 'ADMIN_ROLE'"
+          }
+        },
+        "description": "Lock the volume with host holding the lock",
+        "operationId": "put_locks",
+        "security": [
+          {
+            "sso": [
+              "read",
+              "write"
+            ]
+          }
+        ],
+        "tags": [
+          "storage"
+        ]
+      }
+    },
+    "/{subsystem}/volumes/{volume_name}/snapshots": {
+      "parameters": [
+        {
+          "in": "path",
+          "description": "The name of the volume. Must not contain leading /. On NetApp back-ends, this may either be the name of a volume, or node_name:/junction/path.",
+          "name": "volume_name",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "in": "path",
+          "description": "The subsystem to run the command on.",
+          "name": "subsystem",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "get": {
+        "responses": {
+          "200": {
+            "description": "All snapshots for the volume",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Snapshot"
+              }
+            }
+          }
+        },
+        "operationId": "get_all_snapshots",
+        "parameters": [
+          {
+            "name": "X-Fields",
+            "in": "header",
+            "type": "string",
+            "format": "mask",
+            "description": "An optional fields mask"
+          }
+        ],
+        "tags": [
+          "storage"
+        ]
+      }
+    },
+    "/{subsystem}/volumes/{volume_name}/snapshots/{snapshot_name}": {
+      "parameters": [
+        {
+          "in": "path",
+          "description": "The snapshot name",
+          "name": "snapshot_name",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "in": "path",
+          "description": "The name of the volume. Must not contain leading /. On NetApp back-ends, this may either be the name of a volume, or node_name:/junction/path.",
+          "name": "volume_name",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "in": "path",
+          "description": "The subsystem to run the command on.",
+          "name": "subsystem",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "delete": {
+        "responses": {
+          "204": {
+            "description": "Successfully deleted"
+          },
+          "403": {
+            "description": "Current user is not logged in or not a member of the role 'ADMIN_ROLE'"
+          },
+          "404": {
+            "description": "No such snapshot"
+          }
+        },
+        "description": "Delete the snapshot",
+        "operationId": "delete_snapshots",
+        "security": [
+          {
+            "sso": [
+              "read",
+              "write"
+            ]
+          }
+        ],
+        "tags": [
+          "storage"
+        ]
+      },
+      "get": {
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/Snapshot"
+            }
+          }
+        },
+        "description": "Get the current information for a given snapshot",
+        "operationId": "get_snapshots",
+        "parameters": [
+          {
+            "name": "X-Fields",
+            "in": "header",
+            "type": "string",
+            "format": "mask",
+            "description": "An optional fields mask"
+          }
+        ],
+        "tags": [
+          "storage"
+        ]
+      },
+      "post": {
+        "responses": {
+          "201": {
+            "description": "Successfully created a snapshot"
+          },
+          "409": {
+            "description": "Too many snapshots, cannot create another. Try `purge_old_if_needed=true`."
+          }
+        },
+        "description": "Create a new snapshot of *volume_name* under *snapshot_name*",
+        "operationId": "post_snapshots",
+        "parameters": [
+          {
+            "name": "payload",
+            "required": true,
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/SnapshotPut"
+            }
+          }
+        ],
+        "tags": [
+          "storage"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "CERN Unified Storage API",
+    "version": "2.0.3",
+    "description": "A unified storage API for all data-storage back-ends."
+  },
+  "produces": [
+    "application/json"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "tags": [
+    {
+      "name": "default",
+      "description": "Default namespace"
+    },
+    {
+      "name": "sapi",
+      "description": "Storage operations"
+    }
+  ],
+  "securityDefinitions": {
+    "api_key": {
+      "type": "apiKey",
+      "name": "api_key",
+      "in": "header"
+    },
+    "sso": {
+      "type": "oauth2",
+      "authorizationUrl": "/login",
+      "flow": "implicit",
+      "scopes": {
+        "write": "Creation/Destruction operations",
+        "read": "Safe RO operations"
+      }
+    }
+  },
+  "definitions": {
+    "VolumeRead": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/VolumeCreate"
+        },
+        {
+          "properties": {
+            "size_used": {
+              "type": "integer"
+            },
+            "uuid": {
+              "type": "string",
+              "minLength": 1
+            },
+            "state": {
+              "type": "string",
+              "minLength": 1
+            },
+            "filer_address": {
+              "type": "string",
+              "minLength": 1
+            },
+            "creation_time": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "percentage_snapshot_reserve_used": {
+              "type": "integer"
+            }
+          },
+          "type": "object"
+        }
+      ]
+    },
+    "VolumeCreate": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/VolumeWrite"
+        },
+        {
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "The internal name of the volume",
+              "example": "volume_name",
+              "minLength": 1
+            },
+            "size_total": {
+              "type": "integer",
+              "description": "The total size of the volume,  in bytes. If creating, the size of the volume."
+            },
+            "aggregate_name": {
+              "type": "string",
+              "description": "If applicable, the aggregate to place the volume in (NetApp only). If not provided, will use the one with the most free space.",
+              "minLength": 1
+            },
+            "junction_path": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "type": "object"
+        }
+      ]
+    },
+    "VolumeWrite": {
+      "properties": {
+        "autosize_enabled": {
+          "type": "boolean"
+        },
+        "autosize_increment": {
+          "type": "integer"
+        },
+        "max_autosize": {
+          "type": "integer"
+        },
+        "active_policy_name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "percentage_snapshot_reserve": {
+          "type": "integer"
+        },
+        "compression_enabled": {
+          "type": "boolean"
+        },
+        "inline_compression": {
+          "type": "boolean"
+        },
+        "caching_policy": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "OptionalFromSnapshot": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/VolumeCreate"
+        },
+        {
+          "properties": {
+            "from_snapshot": {
+              "type": "string",
+              "description": "The snapshot name to create from/restore"
+            },
+            "from_volume": {
+              "type": "string",
+              "description": "When cloning a volume, use this volume as basis for the snapshot to start from"
+            }
+          },
+          "type": "object"
+        }
+      ]
+    },
+    "Snapshot": {
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "SnapshotPut": {
+      "properties": {
+        "purge_old_if_needed": {
+          "type": "boolean",
+          "description": "If `true`, purge the oldest snapshot iff necessary  to create a new one"
+        }
+      },
+      "type": "object"
+    },
+    "Lock": {
+      "required": [
+        "host"
+      ],
+      "properties": {
+        "host": {
+          "type": "string",
+          "example": "dbthing.cern.ch",
+          "minLength": 1
+        }
+      },
+      "type": "object"
+    },
+    "Export Policy": {
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "allow_cluster_x",
+          "minLength": 1
+        },
+        "rules": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "example": "10.10.10.1/24",
+            "minLength": 1
+          }
+        }
+      },
+      "type": "object"
+    },
+    "PolicyRule": {
+      "properties": {
+        "rules": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "example": "10.10.10.1/24",
+            "minLength": 1
+          }
+        }
+      },
+      "type": "object"
+    }
+  },
+  "responses": {
+    "ParseError": {
+      "description": "When a mask can't be parsed"
+    },
+    "MaskError": {
+      "description": "When any error occurs on mask"
+    },
+    "APIError": {
+      "description": "Return the error message from the filer and 500 status code"
+    }
+  }
+}
