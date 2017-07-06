@@ -745,7 +745,7 @@
     },
     "sso": {
       "type": "oauth2",
-      "authorizationUrl": "/login",
+      "authorizationUrl": "https://it-db-storage-api.web.cern.ch/login",
       "flow": "implicit",
       "scopes": {
         "write": "Creation/Destruction operations",
