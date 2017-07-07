@@ -1,27 +1,27 @@
-# swagger_client.DefaultApi
+# sapi_client.StorageApi
 
 All URIs are relative to *https://localhost/*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**delete_export**](DefaultApi.md#delete_export) | **DELETE** /{subsystem}/export/{policy} | 
-[**delete_export_rule**](DefaultApi.md#delete_export_rule) | **DELETE** /{subsystem}/export/{policy}/{rule} | 
-[**delete_locks**](DefaultApi.md#delete_locks) | **DELETE** /{subsystem}/volumes/{volume_name}/locks/{host} | 
-[**delete_snapshots**](DefaultApi.md#delete_snapshots) | **DELETE** /{subsystem}/volumes/{volume_name}/snapshots/{snapshot_name} | 
-[**delete_volume**](DefaultApi.md#delete_volume) | **DELETE** /{subsystem}/volumes/{volume_name} | 
-[**get_all_exports**](DefaultApi.md#get_all_exports) | **GET** /{subsystem}/export | 
-[**get_all_locks**](DefaultApi.md#get_all_locks) | **GET** /{subsystem}/volumes/{volume_name}/locks | 
-[**get_all_snapshots**](DefaultApi.md#get_all_snapshots) | **GET** /{subsystem}/volumes/{volume_name}/snapshots | 
-[**get_export**](DefaultApi.md#get_export) | **GET** /{subsystem}/export/{policy} | 
-[**get_snapshots**](DefaultApi.md#get_snapshots) | **GET** /{subsystem}/volumes/{volume_name}/snapshots/{snapshot_name} | 
-[**get_volume**](DefaultApi.md#get_volume) | **GET** /{subsystem}/volumes/{volume_name} | 
-[**get_volumes**](DefaultApi.md#get_volumes) | **GET** /{subsystem}/volumes | 
-[**patch_volume**](DefaultApi.md#patch_volume) | **PATCH** /{subsystem}/volumes/{volume_name} | 
-[**post_export**](DefaultApi.md#post_export) | **POST** /{subsystem}/export/{policy} | 
-[**post_snapshots**](DefaultApi.md#post_snapshots) | **POST** /{subsystem}/volumes/{volume_name}/snapshots/{snapshot_name} | 
-[**post_volume**](DefaultApi.md#post_volume) | **POST** /{subsystem}/volumes/{volume_name} | 
-[**put_export_rule**](DefaultApi.md#put_export_rule) | **PUT** /{subsystem}/export/{policy}/{rule} | 
-[**put_locks**](DefaultApi.md#put_locks) | **PUT** /{subsystem}/volumes/{volume_name}/locks/{host} | 
+[**delete_export**](StorageApi.md#delete_export) | **DELETE** /{subsystem}/export/{policy} | 
+[**delete_export_rule**](StorageApi.md#delete_export_rule) | **DELETE** /{subsystem}/export/{policy}/{rule} | 
+[**delete_locks**](StorageApi.md#delete_locks) | **DELETE** /{subsystem}/volumes/{volume_name}/locks/{host} | 
+[**delete_snapshots**](StorageApi.md#delete_snapshots) | **DELETE** /{subsystem}/volumes/{volume_name}/snapshots/{snapshot_name} | 
+[**delete_volume**](StorageApi.md#delete_volume) | **DELETE** /{subsystem}/volumes/{volume_name} | 
+[**get_all_exports**](StorageApi.md#get_all_exports) | **GET** /{subsystem}/export | 
+[**get_all_locks**](StorageApi.md#get_all_locks) | **GET** /{subsystem}/volumes/{volume_name}/locks | 
+[**get_all_snapshots**](StorageApi.md#get_all_snapshots) | **GET** /{subsystem}/volumes/{volume_name}/snapshots | 
+[**get_export**](StorageApi.md#get_export) | **GET** /{subsystem}/export/{policy} | 
+[**get_snapshots**](StorageApi.md#get_snapshots) | **GET** /{subsystem}/volumes/{volume_name}/snapshots/{snapshot_name} | 
+[**get_volume**](StorageApi.md#get_volume) | **GET** /{subsystem}/volumes/{volume_name} | 
+[**get_volumes**](StorageApi.md#get_volumes) | **GET** /{subsystem}/volumes | 
+[**patch_volume**](StorageApi.md#patch_volume) | **PATCH** /{subsystem}/volumes/{volume_name} | 
+[**post_export**](StorageApi.md#post_export) | **POST** /{subsystem}/export/{policy} | 
+[**post_snapshots**](StorageApi.md#post_snapshots) | **POST** /{subsystem}/volumes/{volume_name}/snapshots/{snapshot_name} | 
+[**post_volume**](StorageApi.md#post_volume) | **POST** /{subsystem}/volumes/{volume_name} | 
+[**put_export_rule**](StorageApi.md#put_export_rule) | **PUT** /{subsystem}/export/{policy}/{rule} | 
+[**put_locks**](StorageApi.md#put_locks) | **PUT** /{subsystem}/volumes/{volume_name}/locks/{host} | 
 
 
 # **delete_export**
@@ -35,19 +35,22 @@ Delete the entire policy
 ```python
 from __future__ import print_statement
 import time
-import swagger_client
-from swagger_client.rest import ApiException
+import sapi_client
+from sapi_client.rest import ApiException
 from pprint import pprint
 
+# Configure OAuth2 access token for authorization: sso
+sapi_client.configuration.access_token = 'YOUR_ACCESS_TOKEN'
+
 # create an instance of the API class
-api_instance = swagger_client.DefaultApi()
+api_instance = sapi_client.StorageApi()
 policy = 'policy_example' # str | The policy to operate on
 subsystem = 'subsystem_example' # str | The subsystem to run the command on.
 
 try: 
     api_instance.delete_export(policy, subsystem)
 except ApiException as e:
-    print("Exception when calling DefaultApi->delete_export: %s\n" % e)
+    print("Exception when calling StorageApi->delete_export: %s\n" % e)
 ```
 
 ### Parameters
@@ -63,7 +66,7 @@ void (empty response body)
 
 ### Authorization
 
-No authorization required
+[sso](../README.md#sso)
 
 ### HTTP request headers
 
@@ -83,12 +86,15 @@ Delete rule from policy
 ```python
 from __future__ import print_statement
 import time
-import swagger_client
-from swagger_client.rest import ApiException
+import sapi_client
+from sapi_client.rest import ApiException
 from pprint import pprint
 
+# Configure OAuth2 access token for authorization: sso
+sapi_client.configuration.access_token = 'YOUR_ACCESS_TOKEN'
+
 # create an instance of the API class
-api_instance = swagger_client.DefaultApi()
+api_instance = sapi_client.StorageApi()
 rule = 'rule_example' # str | The policy rule to operate on
 policy = 'policy_example' # str | The policy to operate on
 subsystem = 'subsystem_example' # str | The subsystem to run the command on.
@@ -96,7 +102,7 @@ subsystem = 'subsystem_example' # str | The subsystem to run the command on.
 try: 
     api_instance.delete_export_rule(rule, policy, subsystem)
 except ApiException as e:
-    print("Exception when calling DefaultApi->delete_export_rule: %s\n" % e)
+    print("Exception when calling StorageApi->delete_export_rule: %s\n" % e)
 ```
 
 ### Parameters
@@ -113,7 +119,7 @@ void (empty response body)
 
 ### Authorization
 
-No authorization required
+[sso](../README.md#sso)
 
 ### HTTP request headers
 
@@ -133,12 +139,15 @@ Force the lock for the host
 ```python
 from __future__ import print_statement
 import time
-import swagger_client
-from swagger_client.rest import ApiException
+import sapi_client
+from sapi_client.rest import ApiException
 from pprint import pprint
 
+# Configure OAuth2 access token for authorization: sso
+sapi_client.configuration.access_token = 'YOUR_ACCESS_TOKEN'
+
 # create an instance of the API class
-api_instance = swagger_client.DefaultApi()
+api_instance = sapi_client.StorageApi()
 host = 'host_example' # str | the host holding the lock in question
 volume_name = 'volume_name_example' # str | The name of the volume. Must not contain leading /. On NetApp back-ends, this may either be the name of a volume, or node_name:/junction/path.
 subsystem = 'subsystem_example' # str | The subsystem to run the command on.
@@ -146,7 +155,7 @@ subsystem = 'subsystem_example' # str | The subsystem to run the command on.
 try: 
     api_instance.delete_locks(host, volume_name, subsystem)
 except ApiException as e:
-    print("Exception when calling DefaultApi->delete_locks: %s\n" % e)
+    print("Exception when calling StorageApi->delete_locks: %s\n" % e)
 ```
 
 ### Parameters
@@ -163,7 +172,7 @@ void (empty response body)
 
 ### Authorization
 
-No authorization required
+[sso](../README.md#sso)
 
 ### HTTP request headers
 
@@ -183,12 +192,15 @@ Delete the snapshot
 ```python
 from __future__ import print_statement
 import time
-import swagger_client
-from swagger_client.rest import ApiException
+import sapi_client
+from sapi_client.rest import ApiException
 from pprint import pprint
 
+# Configure OAuth2 access token for authorization: sso
+sapi_client.configuration.access_token = 'YOUR_ACCESS_TOKEN'
+
 # create an instance of the API class
-api_instance = swagger_client.DefaultApi()
+api_instance = sapi_client.StorageApi()
 snapshot_name = 'snapshot_name_example' # str | The snapshot name
 volume_name = 'volume_name_example' # str | The name of the volume. Must not contain leading /. On NetApp back-ends, this may either be the name of a volume, or node_name:/junction/path.
 subsystem = 'subsystem_example' # str | The subsystem to run the command on.
@@ -196,7 +208,7 @@ subsystem = 'subsystem_example' # str | The subsystem to run the command on.
 try: 
     api_instance.delete_snapshots(snapshot_name, volume_name, subsystem)
 except ApiException as e:
-    print("Exception when calling DefaultApi->delete_snapshots: %s\n" % e)
+    print("Exception when calling StorageApi->delete_snapshots: %s\n" % e)
 ```
 
 ### Parameters
@@ -213,7 +225,7 @@ void (empty response body)
 
 ### Authorization
 
-No authorization required
+[sso](../README.md#sso)
 
 ### HTTP request headers
 
@@ -233,19 +245,22 @@ Restrict the volume named *volume_name* but do not actually delete it
 ```python
 from __future__ import print_statement
 import time
-import swagger_client
-from swagger_client.rest import ApiException
+import sapi_client
+from sapi_client.rest import ApiException
 from pprint import pprint
 
+# Configure OAuth2 access token for authorization: sso
+sapi_client.configuration.access_token = 'YOUR_ACCESS_TOKEN'
+
 # create an instance of the API class
-api_instance = swagger_client.DefaultApi()
+api_instance = sapi_client.StorageApi()
 volume_name = 'volume_name_example' # str | The name of the volume. Must not contain leading /. On NetApp back-ends, this may either be the name of a volume, or node_name:/junction/path.
 subsystem = 'subsystem_example' # str | The subsystem to run the command on.
 
 try: 
     api_instance.delete_volume(volume_name, subsystem)
 except ApiException as e:
-    print("Exception when calling DefaultApi->delete_volume: %s\n" % e)
+    print("Exception when calling StorageApi->delete_volume: %s\n" % e)
 ```
 
 ### Parameters
@@ -261,7 +276,7 @@ void (empty response body)
 
 ### Authorization
 
-No authorization required
+[sso](../README.md#sso)
 
 ### HTTP request headers
 
@@ -281,12 +296,15 @@ Get all ACLs present on the back-end
 ```python
 from __future__ import print_statement
 import time
-import swagger_client
-from swagger_client.rest import ApiException
+import sapi_client
+from sapi_client.rest import ApiException
 from pprint import pprint
 
+# Configure OAuth2 access token for authorization: sso
+sapi_client.configuration.access_token = 'YOUR_ACCESS_TOKEN'
+
 # create an instance of the API class
-api_instance = swagger_client.DefaultApi()
+api_instance = sapi_client.StorageApi()
 subsystem = 'subsystem_example' # str | The subsystem to run the command on.
 x_fields = 'x_fields_example' # str | An optional fields mask (optional)
 
@@ -294,7 +312,7 @@ try:
     api_response = api_instance.get_all_exports(subsystem, x_fields=x_fields)
     pprint(api_response)
 except ApiException as e:
-    print("Exception when calling DefaultApi->get_all_exports: %s\n" % e)
+    print("Exception when calling StorageApi->get_all_exports: %s\n" % e)
 ```
 
 ### Parameters
@@ -310,7 +328,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[sso](../README.md#sso)
 
 ### HTTP request headers
 
@@ -330,12 +348,15 @@ Get the host locking the volume, if any
 ```python
 from __future__ import print_statement
 import time
-import swagger_client
-from swagger_client.rest import ApiException
+import sapi_client
+from sapi_client.rest import ApiException
 from pprint import pprint
 
+# Configure OAuth2 access token for authorization: sso
+sapi_client.configuration.access_token = 'YOUR_ACCESS_TOKEN'
+
 # create an instance of the API class
-api_instance = swagger_client.DefaultApi()
+api_instance = sapi_client.StorageApi()
 volume_name = 'volume_name_example' # str | The name of the volume. Must not contain leading /. On NetApp back-ends, this may either be the name of a volume, or node_name:/junction/path.
 subsystem = 'subsystem_example' # str | The subsystem to run the command on.
 x_fields = 'x_fields_example' # str | An optional fields mask (optional)
@@ -344,7 +365,7 @@ try:
     api_response = api_instance.get_all_locks(volume_name, subsystem, x_fields=x_fields)
     pprint(api_response)
 except ApiException as e:
-    print("Exception when calling DefaultApi->get_all_locks: %s\n" % e)
+    print("Exception when calling StorageApi->get_all_locks: %s\n" % e)
 ```
 
 ### Parameters
@@ -361,7 +382,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[sso](../README.md#sso)
 
 ### HTTP request headers
 
@@ -379,12 +400,12 @@ No authorization required
 ```python
 from __future__ import print_statement
 import time
-import swagger_client
-from swagger_client.rest import ApiException
+import sapi_client
+from sapi_client.rest import ApiException
 from pprint import pprint
 
 # create an instance of the API class
-api_instance = swagger_client.DefaultApi()
+api_instance = sapi_client.StorageApi()
 volume_name = 'volume_name_example' # str | The name of the volume. Must not contain leading /. On NetApp back-ends, this may either be the name of a volume, or node_name:/junction/path.
 subsystem = 'subsystem_example' # str | The subsystem to run the command on.
 x_fields = 'x_fields_example' # str | An optional fields mask (optional)
@@ -393,7 +414,7 @@ try:
     api_response = api_instance.get_all_snapshots(volume_name, subsystem, x_fields=x_fields)
     pprint(api_response)
 except ApiException as e:
-    print("Exception when calling DefaultApi->get_all_snapshots: %s\n" % e)
+    print("Exception when calling StorageApi->get_all_snapshots: %s\n" % e)
 ```
 
 ### Parameters
@@ -430,12 +451,15 @@ Display the rules of a given policy
 ```python
 from __future__ import print_statement
 import time
-import swagger_client
-from swagger_client.rest import ApiException
+import sapi_client
+from sapi_client.rest import ApiException
 from pprint import pprint
 
+# Configure OAuth2 access token for authorization: sso
+sapi_client.configuration.access_token = 'YOUR_ACCESS_TOKEN'
+
 # create an instance of the API class
-api_instance = swagger_client.DefaultApi()
+api_instance = sapi_client.StorageApi()
 policy = 'policy_example' # str | The policy to operate on
 subsystem = 'subsystem_example' # str | The subsystem to run the command on.
 x_fields = 'x_fields_example' # str | An optional fields mask (optional)
@@ -444,7 +468,7 @@ try:
     api_response = api_instance.get_export(policy, subsystem, x_fields=x_fields)
     pprint(api_response)
 except ApiException as e:
-    print("Exception when calling DefaultApi->get_export: %s\n" % e)
+    print("Exception when calling StorageApi->get_export: %s\n" % e)
 ```
 
 ### Parameters
@@ -461,7 +485,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[sso](../README.md#sso)
 
 ### HTTP request headers
 
@@ -481,12 +505,12 @@ Get the current information for a given snapshot
 ```python
 from __future__ import print_statement
 import time
-import swagger_client
-from swagger_client.rest import ApiException
+import sapi_client
+from sapi_client.rest import ApiException
 from pprint import pprint
 
 # create an instance of the API class
-api_instance = swagger_client.DefaultApi()
+api_instance = sapi_client.StorageApi()
 snapshot_name = 'snapshot_name_example' # str | The snapshot name
 volume_name = 'volume_name_example' # str | The name of the volume. Must not contain leading /. On NetApp back-ends, this may either be the name of a volume, or node_name:/junction/path.
 subsystem = 'subsystem_example' # str | The subsystem to run the command on.
@@ -496,7 +520,7 @@ try:
     api_response = api_instance.get_snapshots(snapshot_name, volume_name, subsystem, x_fields=x_fields)
     pprint(api_response)
 except ApiException as e:
-    print("Exception when calling DefaultApi->get_snapshots: %s\n" % e)
+    print("Exception when calling StorageApi->get_snapshots: %s\n" % e)
 ```
 
 ### Parameters
@@ -534,12 +558,15 @@ Get a specific volume by name
 ```python
 from __future__ import print_statement
 import time
-import swagger_client
-from swagger_client.rest import ApiException
+import sapi_client
+from sapi_client.rest import ApiException
 from pprint import pprint
 
+# Configure OAuth2 access token for authorization: sso
+sapi_client.configuration.access_token = 'YOUR_ACCESS_TOKEN'
+
 # create an instance of the API class
-api_instance = swagger_client.DefaultApi()
+api_instance = sapi_client.StorageApi()
 volume_name = 'volume_name_example' # str | The name of the volume. Must not contain leading /. On NetApp back-ends, this may either be the name of a volume, or node_name:/junction/path.
 subsystem = 'subsystem_example' # str | The subsystem to run the command on.
 x_fields = 'x_fields_example' # str | An optional fields mask (optional)
@@ -548,7 +575,7 @@ try:
     api_response = api_instance.get_volume(volume_name, subsystem, x_fields=x_fields)
     pprint(api_response)
 except ApiException as e:
-    print("Exception when calling DefaultApi->get_volume: %s\n" % e)
+    print("Exception when calling StorageApi->get_volume: %s\n" % e)
 ```
 
 ### Parameters
@@ -565,7 +592,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[sso](../README.md#sso)
 
 ### HTTP request headers
 
@@ -585,12 +612,15 @@ Get a list of all volumes
 ```python
 from __future__ import print_statement
 import time
-import swagger_client
-from swagger_client.rest import ApiException
+import sapi_client
+from sapi_client.rest import ApiException
 from pprint import pprint
 
+# Configure OAuth2 access token for authorization: sso
+sapi_client.configuration.access_token = 'YOUR_ACCESS_TOKEN'
+
 # create an instance of the API class
-api_instance = swagger_client.DefaultApi()
+api_instance = sapi_client.StorageApi()
 subsystem = 'subsystem_example' # str | The subsystem to run the command on.
 x_fields = 'x_fields_example' # str | An optional fields mask (optional)
 
@@ -598,7 +628,7 @@ try:
     api_response = api_instance.get_volumes(subsystem, x_fields=x_fields)
     pprint(api_response)
 except ApiException as e:
-    print("Exception when calling DefaultApi->get_volumes: %s\n" % e)
+    print("Exception when calling StorageApi->get_volumes: %s\n" % e)
 ```
 
 ### Parameters
@@ -614,7 +644,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[sso](../README.md#sso)
 
 ### HTTP request headers
 
@@ -634,20 +664,23 @@ Partially update volume_name
 ```python
 from __future__ import print_statement
 import time
-import swagger_client
-from swagger_client.rest import ApiException
+import sapi_client
+from sapi_client.rest import ApiException
 from pprint import pprint
 
+# Configure OAuth2 access token for authorization: sso
+sapi_client.configuration.access_token = 'YOUR_ACCESS_TOKEN'
+
 # create an instance of the API class
-api_instance = swagger_client.DefaultApi()
+api_instance = sapi_client.StorageApi()
 volume_name = 'volume_name_example' # str | The name of the volume. Must not contain leading /. On NetApp back-ends, this may either be the name of a volume, or node_name:/junction/path.
 subsystem = 'subsystem_example' # str | The subsystem to run the command on.
-payload = swagger_client.VolumeWrite() # VolumeWrite | 
+payload = sapi_client.VolumeWrite() # VolumeWrite | 
 
 try: 
     api_instance.patch_volume(volume_name, subsystem, payload)
 except ApiException as e:
-    print("Exception when calling DefaultApi->patch_volume: %s\n" % e)
+    print("Exception when calling StorageApi->patch_volume: %s\n" % e)
 ```
 
 ### Parameters
@@ -664,7 +697,7 @@ void (empty response body)
 
 ### Authorization
 
-No authorization required
+[sso](../README.md#sso)
 
 ### HTTP request headers
 
@@ -684,20 +717,23 @@ Grant hosts matching a given pattern access to the given volume
 ```python
 from __future__ import print_statement
 import time
-import swagger_client
-from swagger_client.rest import ApiException
+import sapi_client
+from sapi_client.rest import ApiException
 from pprint import pprint
 
+# Configure OAuth2 access token for authorization: sso
+sapi_client.configuration.access_token = 'YOUR_ACCESS_TOKEN'
+
 # create an instance of the API class
-api_instance = swagger_client.DefaultApi()
+api_instance = sapi_client.StorageApi()
 policy = 'policy_example' # str | The policy to operate on
 subsystem = 'subsystem_example' # str | The subsystem to run the command on.
-payload = swagger_client.PolicyRule() # PolicyRule | 
+payload = sapi_client.PolicyRule() # PolicyRule | 
 
 try: 
     api_instance.post_export(policy, subsystem, payload)
 except ApiException as e:
-    print("Exception when calling DefaultApi->post_export: %s\n" % e)
+    print("Exception when calling StorageApi->post_export: %s\n" % e)
 ```
 
 ### Parameters
@@ -714,7 +750,7 @@ void (empty response body)
 
 ### Authorization
 
-No authorization required
+[sso](../README.md#sso)
 
 ### HTTP request headers
 
@@ -734,21 +770,21 @@ Create a new snapshot of *volume_name* under *snapshot_name*
 ```python
 from __future__ import print_statement
 import time
-import swagger_client
-from swagger_client.rest import ApiException
+import sapi_client
+from sapi_client.rest import ApiException
 from pprint import pprint
 
 # create an instance of the API class
-api_instance = swagger_client.DefaultApi()
+api_instance = sapi_client.StorageApi()
 snapshot_name = 'snapshot_name_example' # str | The snapshot name
 volume_name = 'volume_name_example' # str | The name of the volume. Must not contain leading /. On NetApp back-ends, this may either be the name of a volume, or node_name:/junction/path.
 subsystem = 'subsystem_example' # str | The subsystem to run the command on.
-payload = swagger_client.SnapshotPut() # SnapshotPut | 
+payload = sapi_client.SnapshotPut() # SnapshotPut | 
 
 try: 
     api_instance.post_snapshots(snapshot_name, volume_name, subsystem, payload)
 except ApiException as e:
-    print("Exception when calling DefaultApi->post_snapshots: %s\n" % e)
+    print("Exception when calling StorageApi->post_snapshots: %s\n" % e)
 ```
 
 ### Parameters
@@ -786,22 +822,25 @@ Create a new volume with the given details.  If `from_snapshot` is a snapshot an
 ```python
 from __future__ import print_statement
 import time
-import swagger_client
-from swagger_client.rest import ApiException
+import sapi_client
+from sapi_client.rest import ApiException
 from pprint import pprint
 
+# Configure OAuth2 access token for authorization: sso
+sapi_client.configuration.access_token = 'YOUR_ACCESS_TOKEN'
+
 # create an instance of the API class
-api_instance = swagger_client.DefaultApi()
+api_instance = sapi_client.StorageApi()
 volume_name = 'volume_name_example' # str | The name of the volume. Must not contain leading /. On NetApp back-ends, this may either be the name of a volume, or node_name:/junction/path.
 subsystem = 'subsystem_example' # str | The subsystem to run the command on.
-payload = swagger_client.OptionalFromSnapshot() # OptionalFromSnapshot | 
+payload = sapi_client.OptionalFromSnapshot() # OptionalFromSnapshot | 
 x_fields = 'x_fields_example' # str | An optional fields mask (optional)
 
 try: 
     api_response = api_instance.post_volume(volume_name, subsystem, payload, x_fields=x_fields)
     pprint(api_response)
 except ApiException as e:
-    print("Exception when calling DefaultApi->post_volume: %s\n" % e)
+    print("Exception when calling StorageApi->post_volume: %s\n" % e)
 ```
 
 ### Parameters
@@ -819,7 +858,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[sso](../README.md#sso)
 
 ### HTTP request headers
 
@@ -839,12 +878,15 @@ Grant hosts matching a given pattern access
 ```python
 from __future__ import print_statement
 import time
-import swagger_client
-from swagger_client.rest import ApiException
+import sapi_client
+from sapi_client.rest import ApiException
 from pprint import pprint
 
+# Configure OAuth2 access token for authorization: sso
+sapi_client.configuration.access_token = 'YOUR_ACCESS_TOKEN'
+
 # create an instance of the API class
-api_instance = swagger_client.DefaultApi()
+api_instance = sapi_client.StorageApi()
 rule = 'rule_example' # str | The policy rule to operate on
 policy = 'policy_example' # str | The policy to operate on
 subsystem = 'subsystem_example' # str | The subsystem to run the command on.
@@ -852,7 +894,7 @@ subsystem = 'subsystem_example' # str | The subsystem to run the command on.
 try: 
     api_instance.put_export_rule(rule, policy, subsystem)
 except ApiException as e:
-    print("Exception when calling DefaultApi->put_export_rule: %s\n" % e)
+    print("Exception when calling StorageApi->put_export_rule: %s\n" % e)
 ```
 
 ### Parameters
@@ -869,7 +911,7 @@ void (empty response body)
 
 ### Authorization
 
-No authorization required
+[sso](../README.md#sso)
 
 ### HTTP request headers
 
@@ -889,12 +931,15 @@ Lock the volume with host holding the lock
 ```python
 from __future__ import print_statement
 import time
-import swagger_client
-from swagger_client.rest import ApiException
+import sapi_client
+from sapi_client.rest import ApiException
 from pprint import pprint
 
+# Configure OAuth2 access token for authorization: sso
+sapi_client.configuration.access_token = 'YOUR_ACCESS_TOKEN'
+
 # create an instance of the API class
-api_instance = swagger_client.DefaultApi()
+api_instance = sapi_client.StorageApi()
 host = 'host_example' # str | the host holding the lock in question
 volume_name = 'volume_name_example' # str | The name of the volume. Must not contain leading /. On NetApp back-ends, this may either be the name of a volume, or node_name:/junction/path.
 subsystem = 'subsystem_example' # str | The subsystem to run the command on.
@@ -902,7 +947,7 @@ subsystem = 'subsystem_example' # str | The subsystem to run the command on.
 try: 
     api_instance.put_locks(host, volume_name, subsystem)
 except ApiException as e:
-    print("Exception when calling DefaultApi->put_locks: %s\n" % e)
+    print("Exception when calling StorageApi->put_locks: %s\n" % e)
 ```
 
 ### Parameters
@@ -919,7 +964,7 @@ void (empty response body)
 
 ### Authorization
 
-No authorization required
+[sso](../README.md#sso)
 
 ### HTTP request headers
 
