@@ -1,0 +1,41 @@
+from __future__ import print_function
+import sys, time
+import sapi_client
+from sapi_client.rest import ApiException
+from sapi_client.api_client import ApiClient
+from pprint import pprint
+
+# Configure OAuth2 access token for authorization: sso
+sapi_client.configuration.access_token = None
+sapi_client.configuration.host = 'https://it-db-storage-api.web.cern.ch'
+sapi_client.configuration.access_token = 'dummytoken' # Need's to be defined
+sapi_client.configuration.debug = False
+
+
+# Get SSO cookie
+import cern_sso
+import requests
+my_url = "https://it-db-storage-api.web.cern.ch/login"
+cookies = cern_sso.krb_sign_on(my_url)
+
+myd = cookies.get_dict(domain='it-db-storage-api.web.cern.ch', path='/')
+ks = myd.keys()
+ks.sort()
+cookiestr = ' '.join(["%s=%s; " % (k,myd.get(k)) for k in ks])
+
+# Generate api client
+print("Cookie: %s\n" % cookiestr)
+
+myApiClient = ApiClient(header_name = 'Cookie', header_value = cookiestr)
+
+# create an instance of the API class
+api_instance = sapi_client.StorageApi(myApiClient)
+
+policy = 'policy_example' # str | The policy to operate on
+subsystem = 'nash' # str | The subsystem to run the command on.
+
+try:
+    print(api_instance.get_volume('dodpinocho03', 'nash'))
+    print("\n")
+except ApiException as e:
+    print("Exception when calling StorageApi->get_all_exports: %s\n" % e)
