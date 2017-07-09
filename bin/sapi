@@ -1,0 +1,11 @@
+#!/usr/bin/env python
+
+import fire
+import sapi_client
+
+# Configure OAuth2 access token for authorization: sso
+sapi_client.configuration.access_token = 'YOUR_ACCESS_TOKEN'
+apiClient = sapi_client.StorageApi()
+
+if __name__ == '__main__':
+    fire.Fire(apiClient, name='sapi')
