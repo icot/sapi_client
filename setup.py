@@ -14,7 +14,7 @@
 import sys
 from setuptools import setup, find_packages
 
-NAME = "sapi_client"
+NAME = "sapi"
 VERSION = "1.0.0"
 # To install the library, run the following
 #
@@ -23,19 +23,20 @@ VERSION = "1.0.0"
 # prerequisite: setuptools
 # http://pypi.python.org/pypi/setuptools
 
-REQUIRES = ["urllib3 >= 1.15", "six >= 1.10", "certifi", "python-dateutil"]
+REQUIRES = ["urllib3 >= 1.15", "six >= 1.10", "certifi", "python-dateutil", "fire"]
 
 setup(
     name=NAME,
     version=VERSION,
-    description="CERN Unified Storage API",
+    description="CERN Unified Storage API client",
     author_email="",
     url="",
     keywords=["Swagger", "CERN Unified Storage API"],
     install_requires=REQUIRES,
     packages=find_packages(),
+    scripts=["bin/sapi"],
     include_package_data=True,
     long_description="""\
-    A unified storage API for all data-storage back-ends.
-    """
+    Client for the CERN IT-DB Storage API"
+    """,
 )
