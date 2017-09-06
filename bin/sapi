@@ -4,8 +4,29 @@ import fire
 import sapi_client
 
 # Configure OAuth2 access token for authorization: sso
-sapi_client.configuration.access_token = 'YOUR_ACCESS_TOKEN'
-apiClient = sapi_client.StorageApi()
+sapi_client.configuration.access_token = None
+sapi_client.configuration.host = 'https://it-db-storage-api.web.cern.ch'
+sapi_client.configuration.access_token = 'dummytoken' # Need's to be defined
+sapi_client.configuration.debug = False
+
+
+# Get SSO cookie
+from sapi_client import cern_sso
+import requests
+
+my_url = "https://it-db-storage-api.web.cern.ch/login"
+cookies = cern_sso.krb_sign_on(my_url)
+
+myd = cookies.get_dict(domain='it-db-storage-api.web.cern.ch', path='/')
+ks = myd.keys()
+ks.sort()
+cookiestr = ' '.join(["%s=%s; " % (k,myd.get(k)) for k in ks])
+
+# Generate api client
+myApiClient = sapi_client.ApiClient(header_name = 'Cookie', header_value = cookiestr)
+
+# create an instance of the API class
+api_instance = sapi_client.StorageApi(myApiClient)
 
 if __name__ == '__main__':
-    fire.Fire(apiClient, name='sapi')
+    fire.Fire(api_instance, name='sapi')
