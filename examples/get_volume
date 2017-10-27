@@ -8,10 +8,13 @@ from sapi_client.api_client import ApiClient
 from pprint import pprint
 
 # Configure OAuth2 access token for authorization: sso
-sapi_client.configuration.access_token = None
-sapi_client.configuration.host = 'https://it-db-storage-api.web.cern.ch'
-sapi_client.configuration.access_token = 'dummytoken' # Need's to be defined
-sapi_client.configuration.debug = False
+
+config = sapi_client.Configuration()
+
+config.access_token = None
+config.host = 'it-db-storage-api.web.cern.ch'
+config.access_token = 'dummytoken' # Need's to be defined
+config.debug = False
 
 
 # Get SSO cookie
@@ -28,16 +31,34 @@ cookiestr = ' '.join(["%s=%s; " % (k,myd.get(k)) for k in ks])
 # Generate api client
 print("Cookie: %s\n" % cookiestr)
 
-myApiClient = ApiClient(header_name = 'Cookie', header_value = cookiestr)
+myApiClient = ApiClient(header_name = 'Cookie', header_value = cookiestr, configuration = config)
 
 # create an instance of the API class
-api_instance = sapi_client.StorageApi(myApiClient)
+api_instance = sapi_client.apis.sapi_api.SapiApi(myApiClient)
 
 policy = 'policy_example' # str | The policy to operate on
 subsystem = 'nash' # str | The subsystem to run the command on.
 
-try:
-    print(api_instance.get_volume('dodpinocho03', 'nash'))
-    print("\n")
-except ApiException as e:
-    print("Exception when calling StorageApi->get_all_exports: %s\n" % e)
+def test():
+    """API test"""
+    try:
+        print(api_instance.get_volume('dodpinocho03', 'nash'))
+        print("\n")
+    except ApiException as e:
+        print("Exception when calling StorageApi->get_all_exports: %s\n" % e)
+
+
+def raw_test(cookie):
+    """Basic test using requests"""
+    import requests
+    test_url =  "https://it-db-storage-api.web.cern.ch/v3/nash/volumes/dodpinocho03"
+    r = requests.get(test_url, cookies = { 'Cookie': cookie} )
+    print(r.status_code)
+    pprint(r.headers)
+    pprint(r.json())
+    
+
+
+if __name__ == "__main__":
+    #raw_test(cookiestr)
+    test()
