@@ -11,7 +11,6 @@
 """
 
 
-import sys
 from setuptools import setup, find_packages
 
 NAME = "sapi"
@@ -24,24 +23,25 @@ VERSION = "0.1.0"
 # http://pypi.python.org/pypi/setuptools
 
 REQUIRES = [
-        "urllib3 >= 1.15", 
-        "six >= 1.10", 
-        "certifi", 
-        "python-dateutil", 
-        "fire", 
-        "requests",
-        "requests_kerberos",
-        "configparser",
-        "python-cern-sso-krb",
-        ]
+    "requests",
+    "requests_kerberos",
+    "urllib3 >= 1.15",
+    "six >= 1.10",
+    "certifi",
+    "python-dateutil",
+    "fire",
+    "configparser",
+    "python-cern-sso-krb",
+    ]
 
 setup(
     name=NAME,
     version=VERSION,
     description="CERN Unified Storage API client",
-    author_email="",
-    url="",
-    keywords=["Swagger", "CERN Unified Storage API"],
+    author='Ignacio Coterillo',
+    author_email="ignacio.coterillo@cern.ch",
+    url="https://github.com/icot/sapi_client",
+    keywords=["Swagger", "CERN", "SAPI"],
     install_requires=REQUIRES,
     packages=find_packages(),
     scripts=["bin/sapi"],
@@ -49,4 +49,22 @@ setup(
     long_description="""\
     Client for the CERN IT-DB Storage API"
     """,
+    license='GPLv3',
+    classifiers=[
+        # How mature is this project? Common values are
+        #   3 - Alpha
+        #   4 - Beta
+        #   5 - Production/Stable
+        'Development Status :: 4 - Beta',
+
+        # Indicate who your project is intended for
+        'Intended Audience :: Developers',
+
+        # Pick your license as you wish (should match "license" above)
+        'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
+
+        # Specify the Python versions you support here. In particular, ensure
+        # that you indicate whether you support Python 2, Python 3 or both.
+        'Programming Language :: Python :: 2.7',
+    ],
 )
