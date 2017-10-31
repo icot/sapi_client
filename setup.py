@@ -30,7 +30,9 @@ REQUIRES = [
         "python-dateutil", 
         "fire", 
         "requests",
-        "requests_kerberos"
+        "requests_kerberos",
+        "configparser",
+        "python-cern-sso-krb",
         ]
 
 setup(
