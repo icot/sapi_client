@@ -1,55 +1,67 @@
 #!/usr/bin/env python
 
 import sys
+
+# CLI generation
 import fire
 
+# Configuration loading
 import ConfigParser
 from ConfigParser import SafeConfigParser
-config = SafeConfigParser()
-cfg_candidates = ['/etc/sapi/sapi.conf']
-found = config.read(cfg_candidates)
 
-api_host = None
+# CERN SSO cookie
+import cern_sso
 
-try:
-    api_host = config.get('api', 'host')
-    if not api_host:
-        print "Error in configuration file. API host not defined"
-        sys.exit(-1)
-except ConfigParser.NoSectionError:
-    print "Error in configuration file. [api] section not defined"
-    sys.exit(-1)
-
+# CERN DB Storage API client library
 import sapi_client
 from sapi_client.api_client import ApiClient
 
+CONFIG = SafeConfigParser()
+CFG_CANDIDATES = ['/etc/sapi/sapi.conf']
+FOUND = CONFIG.read(CFG_CANDIDATES)
+
+API_HOST = None
+
+try:
+    API_HOST = CONFIG.get('api', 'host')
+    if not API_HOST:
+        print "Error in CONFIGuration file. API host not defined"
+        sys.exit(-1)
+except ConfigParser.NoSectionError:
+    print "Error in CONFIGuration file. [api] section not defined"
+    sys.exit(-1)
+
+
 # Configure OAuth3 access token for authorization: sso
 
-config = sapi_client.Configuration()
+APICONFIG = sapi_client.Configuration()
 
-config.access_token = None
-config.host = api_host
-config.access_token = 'dummytoken' # Need's to be defined
-config.debug = False
+APICONFIG.access_token = None
+APICONFIG.host = API_HOST
+APICONFIG.access_token = 'dummytoken' # Need's to be defined
+APICONFIG.debug = False
 
+MY_URL = "https://%s/login" % (API_HOST)
 
-# Get SSO cookie
-from sapi_client import cern_sso
-import requests
+def main():
+    """ Main function """
 
-my_url = "https://%s/login" % (api_host)
-cookies = cern_sso.krb_sign_on(my_url)
+    # Fetch SSO cookie and compose client
+    cookies = cern_sso.krb_sign_on(MY_URL)
+    myd = cookies.get_dict(domain=API_HOST, path='/')
+    ckeys = myd.keys()
+    ckeys.sort()
+    cookiestr = ' '.join(["%s=%s; " % (k, myd.get(k)) for k in ckeys])
 
-myd = cookies.get_dict(domain = api_host, path='/')
-ks = myd.keys()
-ks.sort()
-cookiestr = ' '.join(["%s=%s; " % (k,myd.get(k)) for k in ks])
+    # create an instance of the API class
+    api_client = ApiClient(header_name='Cookie',
+                           header_value=cookiestr,
+                           configuration=APICONFIG)
+    api_instance = sapi_client.apis.sapi_api.SapiApi(api_client)
 
-
-# create an instance of the API class
-myApiClient = ApiClient(header_name = 'Cookie', header_value = cookiestr, configuration = config)
-api_instance = sapi_client.apis.sapi_api.SapiApi(myApiClient)
-
-# create an instance of the API class
-if __name__ == '__main__':
+    # Launch CLI
     fire.Fire(api_instance)
+
+
+if __name__ == '__main__':
+    main()
