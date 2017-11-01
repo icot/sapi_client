@@ -14,7 +14,7 @@
 from setuptools import setup, find_packages
 
 NAME = "sapi"
-VERSION = "0.1.0"
+VERSION = "0.1.1"
 # To install the library, run the following
 #
 # python setup.py install
@@ -46,8 +46,8 @@ setup(
     packages=find_packages(),
     scripts=["bin/sapi"],
     include_package_data=True,
-    long_description="""\
-    Client for the CERN IT-DB Storage API"
+    long_description="""
+    Client for the CERN IT-DB Storage API
     """,
     license='GPLv3',
     classifiers=[
