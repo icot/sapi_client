@@ -42,6 +42,17 @@ import sapi_client
 
 ## CLI tool
 
+### Configuration file
+
+The CLI tool will try to read a documentation file located in **/etc/sapi/sapi.conf**
+
+```
+[api]
+host = host-where-the-api-runs.domain.ext
+```
+
+### Use
+
 ```bash
 (test) /t/test sapi
 Type:        SapiApi
