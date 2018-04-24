@@ -13,6 +13,7 @@ import cern_sso
 
 # CERN DB Storage API client library
 import sapi_client
+from sapi_client.rest import ApiException
 from sapi_client.api_client import ApiClient
 
 CONFIG = SafeConfigParser()
@@ -54,43 +55,53 @@ subparsers = parser.add_subparsers()
 
 display_p = subparsers.add_parser('display')
 display_p.add_argument('instance_name')
+display_p.add_argument('--subsystem', default = 'nash')
 
 create_p = subparsers.add_parser('create')
 create_p.add_argument('instance_name')
 create_p.add_argument('size')
+create_p.add_argument('--subsystem', default ='nash')
 
 delete_p = subparsers.add_parser('delete')
 delete_p.add_argument('instance_name')
+delete_p.add_argument('--subsystem', default = 'nash')
 
 
 args = parser.parse_args()
 
+# Fetch SSO cookie and compose client
+cookies = cern_sso.krb_sign_on(MY_URL)
+myd = cookies.get_dict(domain=API_HOST, path='/')
+ckeys = myd.keys()
+ckeys.sort()
+cookiestr = ' '.join(["%s=%s; " % (k, myd.get(k)) for k in ckeys])
+
+# create an instance of the API class
+api_client = ApiClient(header_name='Cookie',
+                       header_value=cookiestr,
+                       configuration=APICONFIG)
+api_instance = sapi_client.apis.sapi_api.SapiApi(api_client)
 
 def main():
     """ Main function """
 
-    # Fetch SSO cookie and compose client
-    cookies = cern_sso.krb_sign_on(MY_URL)
-    myd = cookies.get_dict(domain=API_HOST, path='/')
-    ckeys = myd.keys()
-    ckeys.sort()
-    cookiestr = ' '.join(["%s=%s; " % (k, myd.get(k)) for k in ckeys])
-
-    # create an instance of the API class
-    api_client = ApiClient(header_name='Cookie',
-                           header_value=cookiestr,
-                           configuration=APICONFIG)
-    api_instance = sapi_client.apis.sapi_api.SapiApi(api_client)
-
     if display_p:
-        display(args.instance_name)
+        display(args.instance_name, args.subsystem)
     elif create_p:
-        create(args.instance_name, args.size)
+        create(args.instance_name, args.size, args.subsystem)
     elif delete_p:
-        delete(args.instance_name)
+        delete(args.instance_name, args.subsystem)
 
-def display(instance):
-    print "display info for %s" % (instance)
+def display(instance, subsystem):
+    """Display volumes info for a certain instance"""
+    try:
+        print("\nWAL Volume")
+        print(api_instance.get_volume("dod%s02" % instance, subsystem))
+        print("\nData Volume")
+        print(api_instance.get_volume("dod%s03" % instance, subsystem))
+        print("\n")
+    except ApiException as e:
+        print("Exception when calling StorageApi->get_volume: %s\n" % e)
 
 def create(instance, size):
     print "create volumes for %s with size %s" % (instance, size)
