@@ -51,7 +51,7 @@ MY_URL = "https://%s/login" % (API_HOST)
 
 # Parse arguments
 parser = argparse.ArgumentParser(description='DB On Demand volume tool')
-subparsers = parser.add_subparsers()
+subparsers = parser.add_subparsers(help = 'commands', dest = 'command')
 
 display_p = subparsers.add_parser('display')
 display_p.add_argument('instance_name')
@@ -82,16 +82,6 @@ api_client = ApiClient(header_name='Cookie',
                        configuration=APICONFIG)
 api_instance = sapi_client.apis.sapi_api.SapiApi(api_client)
 
-def main():
-    """ Main function """
-
-    if display_p:
-        display(args.instance_name, args.subsystem)
-    elif create_p:
-        create(args.instance_name, args.size, args.subsystem)
-    elif delete_p:
-        delete(args.instance_name, args.subsystem)
-
 def display(instance, subsystem):
     """Display volumes info for a certain instance"""
     try:
@@ -103,11 +93,47 @@ def display(instance, subsystem):
     except ApiException as e:
         print("Exception when calling StorageApi->get_volume: %s\n" % e)
 
-def create(instance, size):
-    print "create volumes for %s with size %s" % (instance, size)
+def delete(instance, subsystem):
+    """Restrict volumes for a certain instance"""
+    try:
+        print("\nWAL Volume")
+        print(api_instance.delete_volume("dod%s02" % instance, subsystem))
+        print("\nData Volume")
+        print(api_instance.delete_volume("dod%s03" % instance, subsystem))
+        print("\n")
+    except ApiException as e:
+        print("Exception when calling StorageApi->delete_volume: %s\n" % e)
 
-def delete(instance):
-    print "Restricting volumes for %s" % (instance)
+def create(instance, size, subsystem):
+    """Create instance volumes"""
+
+    print "create volumes for %s with size %s" % (instance, size)
+    voloptions = DEFAULTS
+    print("\nWAL Volume")
+    voloptions['junction_path'] = '/ORA/dbs02/%s' % (instance.upper())
+    voloptions['name'] = 'dod%s02' % (instance)
+    voloptions['size'] = size
+    voloptions['max_autosize'] = 3 * size
+    voloptions['aggregate_name'] = 'aggr1_rac5111'
+    print voloptions
+    
+    print("\nDATA Volume")
+    voloptions['junction_path'] = '/ORA/dbs02/%s' % (instance.upper())
+    voloptions['name'] = 'dod%s02' % (instance)
+    voloptions['size'] = size
+    voloptions['max_autosize'] = 3 * size
+    voloptions['aggregate_name'] = 'aggr1_rac5111'
+    print voloptions
+
+def main():
+    """ Main function """
+
+    if args.command == 'display':
+        display(args.instance_name, args.subsystem)
+    elif args.command == 'create':
+        create(args.instance_name, args.size, args.subsystem)
+    elif args.command == 'delete':
+        delete(args.instance_name, args.subsystem)
 
 if __name__ == '__main__':
     main()
