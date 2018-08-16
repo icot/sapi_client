@@ -16,7 +16,6 @@ from __future__ import absolute_import
 import io
 import json
 import ssl
-import certifi
 import logging
 import re
 
@@ -73,8 +72,9 @@ class RESTClientObject(object):
         if configuration.ssl_ca_cert:
             ca_certs = configuration.ssl_ca_cert
         else:
-            # if not set certificate file, use Mozilla's root certificates.
-            ca_certs = certifi.where()
+            # We require this value as mandatory for the configuration object
+            # to avoid delegating to certifi for locating the default Mozilla bundle
+            raise ValueError("Missing configuration.ssl_ca_cert definition")
 
         addition_pool_args = {}
         if configuration.assert_hostname is not None:

@@ -6,6 +6,12 @@ and this project (loosely) (loosely) (loosely) (loosely) (loosely) (loosely) (lo
 
 ## [Unreleased]
 
+## [0.2.1] - 2018-08-16
+### Added
+- Remove certifi as dependency
+### Require
+- Configuration object must define configuration.ssl_ca_cert
+
 ## [0.2.0] - 2018-06-13
 ### Added
 - Remove standard output results from Fire call

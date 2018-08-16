@@ -1,4 +1,4 @@
-%define version 0.1.2
+%define version 0.2.1
 
 Summary: CERNDB SAPI Client Libraries
 Name: cerndb-sw-sapi-client
@@ -60,13 +60,14 @@ exit 0
 /usr/bin/cern-get-sso-cookie.py
 /usr/lib/python2.7/site-packages/sapi_client
 /usr/lib/python2.7/site-packages/fire
-/usr/lib/python2.7/site-packages/certifi
 /usr/lib/python2.7/site-packages/cern_sso.py
 /usr/lib/python2.7/site-packages/sapi-0.1.2-py2.7.egg-info
 /usr/lib/python2.7/site-packages/fire-0.1.2-py2.7.egg-info
-/usr/lib/python2.7/site-packages/certifi-2017.11.05-py2.7.egg-info
 /usr/lib/python2.7/site-packages/python_cern_sso_krb-1.3.3-py2.7.egg-info
 
 %changelog
+* Mon Dec 18 2017 Ignacio Coterillo <icoteril@cern.ch> 0.2.1
+- Output json objects for CLI pipelining via jq
+- Remove certifi as dependency
 * Mon Dec 18 2017 Ignacio Coterillo <icoteril@cern.ch> 0.1.2
 - First packaging

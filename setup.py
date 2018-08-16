@@ -14,7 +14,7 @@
 from setuptools import setup, find_packages
 
 NAME = "sapi"
-VERSION = "0.2.0"
+VERSION = "0.2.1"
 # To install the library, run the following
 #
 # python setup.py install
@@ -27,7 +27,6 @@ REQUIRES = [
     "requests_kerberos",
     "urllib3 >= 1.15",
     "six >= 1.10",
-    "certifi",
     "python-dateutil",
     "fire",
     "configparser",

@@ -31,6 +31,15 @@ except ConfigParser.NoSectionError:
     print "Error in CONFIGuration file. [api] section not defined"
     sys.exit(-1)
 
+try:
+    CA_CERT = CONFIG.get('certs', 'ca')
+    if not CA_CERT:
+        print "Error in CONFIGuration file. ca not defined"
+        sys.exit(-1)
+except ConfigParser.NoSectionError:
+    print "Error in CONFIGuration file. [certs] section not defined"
+    sys.exit(-1)
+
 
 # Configure OAuth3 access token for authorization: sso
 
@@ -40,6 +49,8 @@ APICONFIG.access_token = None
 APICONFIG.host = API_HOST
 APICONFIG.access_token = 'dummytoken' # Need's to be defined
 APICONFIG.debug = False
+APICONFIG.ssl_ca_cert = CA_CERT
+
 
 MY_URL = "https://%s/login" % (API_HOST)
 
