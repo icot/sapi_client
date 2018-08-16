@@ -61,7 +61,7 @@ exit 0
 /usr/lib/python2.7/site-packages/sapi_client
 /usr/lib/python2.7/site-packages/fire
 /usr/lib/python2.7/site-packages/cern_sso.py
-/usr/lib/python2.7/site-packages/sapi-0.1.2-py2.7.egg-info
+/usr/lib/python2.7/site-packages/sapi-0.2.1-py2.7.egg-info
 /usr/lib/python2.7/site-packages/fire-0.1.2-py2.7.egg-info
 /usr/lib/python2.7/site-packages/python_cern_sso_krb-1.3.3-py2.7.egg-info
 
