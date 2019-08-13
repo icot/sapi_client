@@ -27,6 +27,7 @@ REQUIRES = [
     "python-dateutil",
     "fire",
     "configparser",
+    "enum"
     ]
 
 setup(

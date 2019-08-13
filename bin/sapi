@@ -57,8 +57,7 @@ APICONFIG.ssl_ca_cert = CA_CERT
 MY_URL = "https://%s/login_basic" % (API_HOST)
 
 def get_cookie():
-    r = requests.get(MY_URL, auth=(API_USER, API_PASSWORD), cookies=jar,
-            allow_redirects = False)
+    r = requests.get(MY_URL, auth=(API_USER, API_PASSWORD), allow_redirects=False)
     return r.headers.get('Set-Cookie')
 
 
