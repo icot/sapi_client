@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 
-import sys, json, inspect,datetime
+import sys, json, inspect, datetime
+
+import requests
 
 # CLI generation
 import fire
@@ -8,9 +10,6 @@ import fire
 # Configuration loading
 import ConfigParser
 from ConfigParser import SafeConfigParser
-
-# CERN SSO cookie
-import cern_sso
 
 # CERN DB Storage API client library
 import sapi_client
@@ -24,20 +23,23 @@ API_HOST = None
 
 try:
     API_HOST = CONFIG.get('api', 'host')
-    if not API_HOST:
-        print "Error in CONFIGuration file. API host not defined"
+    API_USER = CONFIG.get('api', 'user')
+    API_PASSWORD = CONFIG.get('api', 'password')
+    if not API_HOST or not API_USER or not API_PASSWORD:
+        print "Error in CONFIG file. API host/userr/password not defined"
         sys.exit(-1)
+
 except ConfigParser.NoSectionError:
-    print "Error in CONFIGuration file. [api] section not defined"
+    print "Error in CONFIG file. [api] section not defined"
     sys.exit(-1)
 
 try:
     CA_CERT = CONFIG.get('certs', 'ca')
     if not CA_CERT:
-        print "Error in CONFIGuration file. ca not defined"
+        print "Error in CONFIG file. ca not defined"
         sys.exit(-1)
 except ConfigParser.NoSectionError:
-    print "Error in CONFIGuration file. [certs] section not defined"
+    print "Error in CONFIG file. [certs] section not defined"
     sys.exit(-1)
 
 
@@ -52,21 +54,20 @@ APICONFIG.debug = False
 APICONFIG.ssl_ca_cert = CA_CERT
 
 
-MY_URL = "https://%s/login" % (API_HOST)
+MY_URL = "https://%s/login_basic" % (API_HOST)
+
+def get_cookie():
+    r = requests.get(MY_URL, auth=(API_USER, API_PASSWORD), cookies=jar,
+            allow_redirects = False)
+    return r.headers.get('Set-Cookie')
+
 
 def main():
     """ Main function """
 
-    # Fetch SSO cookie and compose client
-    cookies = cern_sso.krb_sign_on(MY_URL)
-    myd = cookies.get_dict(domain=API_HOST, path='/')
-    ckeys = myd.keys()
-    ckeys.sort()
-    cookiestr = ' '.join(["%s=%s; " % (k, myd.get(k)) for k in ckeys])
-
     # create an instance of the API class
     api_client = ApiClient(header_name='Cookie',
-                           header_value=cookiestr,
+                           header_value=get_cookie(),
                            configuration=APICONFIG)
     api_instance = sapi_client.apis.sapi_api.SapiApi(api_client)
 
